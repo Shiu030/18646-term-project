@@ -117,25 +117,25 @@ int main() {
 
     // Render
 
+    int i, j, s;
     struct timeval start, end;
-
     long mtime, seconds, useconds;
 
     std::cout << "P3\n"
               << image_width << ' ' << image_height << "\n255\n";
     gettimeofday(&start, NULL);
 
-    for (int j = image_height - 1; j >= 0; --j)
+    for (j = image_height - 1; j >= 0; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         #pragma omp parallel for \
                 private(i, s, u, v, r, pixel_color)                     \
                 firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
                 schedule(static)
-        for (int i = 0; i < image_width; ++i)
+        for (i = 0; i < image_width; ++i)
         {
             color pixel_color(0, 0, 0);
-            for (int s = 0; s < samples_per_pixel; ++s)
+            for (s = 0; s < samples_per_pixel; ++s)
             {
                 auto u = (i + random_double()) / (image_width - 1);
                 auto v = (j + random_double()) / (image_height - 1);
