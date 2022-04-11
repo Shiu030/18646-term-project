@@ -21,6 +21,8 @@
 #include <sys/time.h>
 #include <stdio.h>
 
+#include <omp.h>
+
 color ray_color(const ray& r, const hittable& world, int depth) {
     hit_record rec;
 
@@ -122,12 +124,18 @@ int main() {
     std::cerr << "P3\n"
               << image_width << ' ' << image_height << "\n255\n";
     gettimeofday(&start, NULL);
+
     for (int j = image_height - 1; j >= 0; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i)
         {
             color pixel_color(0, 0, 0);
+            #pragma omp parallel for \
+                    private(s, u, v, r) \
+                    shared(image_height, image_width, samples_per_pixel, world, max_depth) \
+                    schedule(static) \
+                    reduction(+:pixel_color)
             for (int s = 0; s < samples_per_pixel; ++s)
             {
                 auto u = (i + random_double()) / (image_width - 1);
@@ -138,12 +146,13 @@ int main() {
             write_color(std::cout, pixel_color, samples_per_pixel);
         }
     }
+
     gettimeofday(&end, NULL);
     seconds = end.tv_sec - start.tv_sec;
     useconds = end.tv_usec - start.tv_usec;
     mtime = ((seconds)*1000 + useconds / 1000.0) + 0.5;
-    
-    std::cerr << "Elapsed time: " << mtime << "milliseconds" << std::endl;
 
     std::cerr << "\nDone.\n";
+    std::cerr << "\nElapsed time: " << mtime << "milliseconds" << std::endl;
+
 }
