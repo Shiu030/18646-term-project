@@ -129,7 +129,7 @@ int main() {
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         #pragma omp parallel for \
-                private(i, s, u, v, r, pixel_color)                     \
+                private(i, s)                     \
                 firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
                 schedule(static)
         for (i = 0; i < image_width; ++i)
