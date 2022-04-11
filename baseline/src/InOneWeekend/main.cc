@@ -121,7 +121,7 @@ int main() {
 
     long mtime, seconds, useconds;
 
-    std::cerr << "P3\n"
+    std::cout << "P3\n"
               << image_width << ' ' << image_height << "\n255\n";
     gettimeofday(&start, NULL);
 
