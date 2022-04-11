@@ -18,7 +18,7 @@
 #include "sphere.h"
 
 #include <iostream>
-
+#include <time.h>
 
 color ray_color(const ray& r, const hittable& world, int depth) {
     hit_record rec;
@@ -115,7 +115,7 @@ int main() {
     // Render
 
     std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
-
+    clock_t begin = clock();
     for (int j = image_height-1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
@@ -129,6 +129,8 @@ int main() {
             write_color(std::cout, pixel_color, samples_per_pixel);
         }
     }
-
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("\nRenderting Time: %f\n", time_spent);
     std::cerr << "\nDone.\n";
 }
