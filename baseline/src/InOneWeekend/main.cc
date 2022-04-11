@@ -98,7 +98,7 @@ int main() {
     const auto aspect_ratio = 16.0 / 9.0;
     const int image_width = 1200;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 100;
+    const int samples_per_pixel = 10;
     const int max_depth = 50;
 
     // World
@@ -133,7 +133,7 @@ int main() {
             color pixel_color(0, 0, 0);
             #pragma omp parallel for \
                     private(s, u, v, r) \
-                    shared(image_height, image_width, samples_per_pixel, world, max_depth) \
+                    firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
                     schedule(static) \
                     reduction(+:pixel_color)
             for (int s = 0; s < samples_per_pixel; ++s)
