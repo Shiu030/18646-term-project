@@ -100,7 +100,7 @@ int main() {
     const int image_height = static_cast<int>(image_width / aspect_ratio);
     const int samples_per_pixel = 10;
     const int max_depth = 50;
-
+    
     // World
 
     auto world = random_scene();
@@ -122,6 +122,8 @@ int main() {
     ray r;
     color pixel_color;
 
+    color write[image_width * image_height];
+
     struct timeval start, end;
     long mtime, seconds, useconds;
 
@@ -134,8 +136,10 @@ int main() {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         #pragma omp parallel for \
                 private(i, s, r, u, v, pixel_color)  \
+                shared(write) \
                 firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
                 schedule(static)
+
         for (i = 0; i < image_width; ++i)
         {
             pixel_color = color(0, 0, 0);
@@ -146,10 +150,14 @@ int main() {
                 r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world, max_depth);
             }
-            write_color(std::cout, pixel_color, samples_per_pixel);
+            write[j*image_width + i] = pixel_color;
         }
     }
 
+    for (i = 0; i < image_width * image_height; ++i) {
+        write_color(std::cout, write[i], samples_per_pixel);
+    }
+    
     gettimeofday(&end, NULL);
     seconds = end.tv_sec - start.tv_sec;
     useconds = end.tv_usec - start.tv_usec;
