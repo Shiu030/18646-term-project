@@ -138,7 +138,7 @@ int main() {
     seconds = end.tv_sec - start.tv_sec;
     useconds = end.tv_usec - start.tv_usec;
     mtime = ((seconds)*1000 + useconds / 1000.0) + 0.5;
-    printf("Elapsed time: %ld milliseconds\n", mtime);
+    std::cout << "Elapsed time: " << mtime << "milliseconds" << std::endl;
 
-    std::cerr << "\nDone.\n";
+    std::cout << "\nDone.\n";
 }
