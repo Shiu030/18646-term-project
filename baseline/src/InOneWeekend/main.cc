@@ -122,7 +122,7 @@ int main() {
     ray r;
     color pixel_color;
 
-    color write[image_width * image_height];
+    color write = malloc(image_width * image_height * sizeof(color));
 
     struct timeval start, end;
     long mtime, seconds, useconds;
@@ -150,7 +150,7 @@ int main() {
                 r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world, max_depth);
             }
-            write[j*image_width + i] = pixel_color;
+            write[(image_height-j-1)*image_width + i] = pixel_color;
         }
     }
 
