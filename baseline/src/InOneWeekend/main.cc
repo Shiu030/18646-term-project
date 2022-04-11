@@ -128,14 +128,13 @@ int main() {
     for (int j = image_height - 1; j >= 0; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
+        #pragma omp parallel for \
+                private(i, s, u, v, r, pixel_color)                     \
+                firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
+                schedule(static)
         for (int i = 0; i < image_width; ++i)
         {
             color pixel_color(0, 0, 0);
-            #pragma omp parallel for \
-                    private(s, u, v, r) \
-                    firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
-                    schedule(static) \
-                    reduction(+:pixel_color)
             for (int s = 0; s < samples_per_pixel; ++s)
             {
                 auto u = (i + random_double()) / (image_width - 1);
