@@ -137,7 +137,7 @@ int main() {
                 schedule(static)
         for (i = 0; i < image_width; ++i)
         {
-            pixel_color(0, 0, 0);
+            pixel_color = color(0, 0, 0);
             for (s = 0; s < samples_per_pixel; ++s)
             {
                 auto u = (i + random_double()) / (image_width - 1);
