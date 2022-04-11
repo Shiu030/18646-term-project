@@ -118,7 +118,6 @@ int main() {
     // Render
 
     int i, s;
-    auto u, v;
     ray r;
 
     struct timeval start, end;
@@ -132,7 +131,7 @@ int main() {
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         #pragma omp parallel for \
-                private(i, s, u, v, r)  \
+                private(i, s, r)  \
                 firstprivate(image_height, image_width, samples_per_pixel, world, max_depth) \
                 schedule(static)
         for (i = 0; i < image_width; ++i)
@@ -140,8 +139,8 @@ int main() {
             color pixel_color(0, 0, 0);
             for (s = 0; s < samples_per_pixel; ++s)
             {
-                u = (i + random_double()) / (image_width - 1);
-                v = (j + random_double()) / (image_height - 1);
+                auto u = (i + random_double()) / (image_width - 1);
+                auto v = (j + random_double()) / (image_height - 1);
                 r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world, max_depth);
             }
