@@ -122,7 +122,7 @@ int main() {
     ray r;
     color pixel_color;
 
-    color write = malloc(image_width * image_height * sizeof(color));
+    color write = malloc(image_width * image_height * sizeof(vec3));
 
     struct timeval start, end;
     long mtime, seconds, useconds;
