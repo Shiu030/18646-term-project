@@ -119,15 +119,19 @@ int main() {
 
     long mtime, seconds, useconds;
 
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+    std::cerr << "P3\n"
+              << image_width << ' ' << image_height << "\n255\n";
     gettimeofday(&start, NULL);
-    for (int j = image_height-1; j >= 0; --j) {
+    for (int j = image_height - 1; j >= 0; --j)
+    {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        for (int i = 0; i < image_width; ++i) {
-            color pixel_color(0,0,0);
-            for (int s = 0; s < samples_per_pixel; ++s) {
-                auto u = (i + random_double()) / (image_width-1);
-                auto v = (j + random_double()) / (image_height-1);
+        for (int i = 0; i < image_width; ++i)
+        {
+            color pixel_color(0, 0, 0);
+            for (int s = 0; s < samples_per_pixel; ++s)
+            {
+                auto u = (i + random_double()) / (image_width - 1);
+                auto v = (j + random_double()) / (image_height - 1);
                 ray r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world, max_depth);
             }
@@ -138,7 +142,8 @@ int main() {
     seconds = end.tv_sec - start.tv_sec;
     useconds = end.tv_usec - start.tv_usec;
     mtime = ((seconds)*1000 + useconds / 1000.0) + 0.5;
-    std::cout << "Elapsed time: " << mtime << "milliseconds" << std::endl;
+    
+    std::cerr << "Elapsed time: " << mtime << "milliseconds" << std::endl;
 
-    std::cout << "\nDone.\n";
+    std::cerr << "\nDone.\n";
 }
