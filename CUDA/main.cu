@@ -74,7 +74,6 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     extern __shared__ vec3 buff[];
     int i = threadIdx.x + blockIdx.x * blockDim.x;
     int j = threadIdx.y + blockIdx.y * blockDim.y;
-    buff[threadIdx.z] = vec3(0.0,0.0,0.0);
     if((i >= max_x) || (j >= max_y)) return;
     int pixel_index = j * max_x + i + threadIdx.z;
     curandState local_rand_state = rand_state[pixel_index];
