@@ -1,18 +1,11 @@
 HOST_COMPILER  = g++
 NVCC = nvcc
 
-# select one of these for Debug vs. Release
-NVCC_DBG       = -g -G
-#NVCC_DBG       =
-
-NVCCFLAGS      = $(NVCC_DBG) -m64
-GENCODE_FLAGS  = -gencode arch=compute_60,code=sm_60
-
 cudart: cudart.o
-	$(NVCC) $(NVCCFLAGS) $(GENCODE_FLAGS) -o cudart cudart.o
+	$(NVCC) -o cudart cudart.o
 
 cudart.o: main.cu
-	$(NVCC) $(NVCCFLAGS) $(GENCODE_FLAGS) -o cudart.o -c main.cu
+	$(NVCC) -o cudart.o -c main.cu
 
 out.ppm: cudart
 	rm -f out.ppm
