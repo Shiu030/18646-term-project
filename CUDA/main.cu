@@ -84,7 +84,7 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     float u = float(i + curand_uniform(&local_rand_state)) * inv_max_x;
     float v = float(j + curand_uniform(&local_rand_state)) * inv_max_y;
     ray r = (*cam)->get_ray(u, v, &local_rand_state);
-    buff[threadIdx.x * 100 + threadIdx.y * 10 + threadIdx.z] = color(r, world, &local_rand_state);
+    buff[threadIdx.x * 10 + threadIdx.y * 10 + threadIdx.z] = color(r, world, &local_rand_state);
     rand_state[pixel_index] = local_rand_state;
     __syncthreads();
     if (threadIdx.z == 0) {
