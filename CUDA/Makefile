@@ -2,19 +2,16 @@ HOST_COMPILER  = g++
 NVCC = nvcc
 
 # select one of these for Debug vs. Release
-#NVCC_DBG       = -g -G
-NVCC_DBG       =
+NVCC_DBG       = -g -G
+#NVCC_DBG       =
 
 NVCCFLAGS      = $(NVCC_DBG) -m64
 GENCODE_FLAGS  = -gencode arch=compute_60,code=sm_60
 
-SRCS = main.cu
-INCS = vec3.h ray.h hitable.h hitable_list.h sphere.h camera.h material.h
-
 cudart: cudart.o
 	$(NVCC) $(NVCCFLAGS) $(GENCODE_FLAGS) -o cudart cudart.o
 
-cudart.o: $(SRCS) $(INCS)
+cudart.o: main.cu
 	$(NVCC) $(NVCCFLAGS) $(GENCODE_FLAGS) -o cudart.o -c main.cu
 
 out.ppm: cudart
