@@ -95,7 +95,7 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
         col[0] = sqrt(col[0]);
         col[1] = sqrt(col[1]);
         col[2] = sqrt(col[2]);
-        fb[pixel_index] = col;
+        fb[j * max_x + i] = col;
     }
 }
 
