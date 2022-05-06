@@ -77,9 +77,11 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     int pixel_index = j*max_x + i;
     curandState local_rand_state = rand_state[pixel_index];
     vec3 col(0,0,0);
+    float inv_max_x = 1 / float(max_x);
+    float inv_max_y = 1 / float(max_y);
     for(int s=0; s < ns; s++) {
-        float u = float(i + curand_uniform(&local_rand_state)) / float(max_x);
-        float v = float(j + curand_uniform(&local_rand_state)) / float(max_y);
+        float u = float(i + curand_uniform(&local_rand_state)) * inv_max_x;
+        float v = float(j + curand_uniform(&local_rand_state)) * inv_max_y;
         ray r = (*cam)->get_ray(u, v, &local_rand_state);
         col += color(r, world, &local_rand_state);
     }
