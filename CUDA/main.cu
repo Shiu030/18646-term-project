@@ -54,7 +54,7 @@ __device__ vec3 color(const ray& r, hitable **world, curandState *local_rand_sta
 
 __global__ void rand_init(curandState *rand_state) {
     if (threadIdx.x == 0 && blockIdx.x == 0) {
-        curand_init(1984, 0, 0, rand_state);
+        curand_init(1984+pixel_index, 0, 0, &rand_state[pixel_index]);
     }
 }
 
