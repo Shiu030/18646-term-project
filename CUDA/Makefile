@@ -1,10 +1,13 @@
 HOST_COMPILER  = g++
-NVCC = nvcc
+NVCC           = nvcc
+
+SRCS = main.cu
+INCS = vec3.h ray.h hitable.h hitable_list.h sphere.h camera.h material.h
 
 cudart: cudart.o
 	$(NVCC) -o cudart cudart.o
 
-cudart.o: main.cu
+cudart.o: $(SRCS) $(INCS)
 	$(NVCC) -o cudart.o -c main.cu
 
 out.ppm: cudart
