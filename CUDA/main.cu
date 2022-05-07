@@ -77,17 +77,37 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     int pixel_index = j*max_x + i;
     curandState local_rand_state = rand_state[pixel_index];
     vec3 col(0,0,0);
+
+    float col_0 = col[0];
+    float col_1 = col[1];
+    float col_2 = col[2];
+
+    float max_x_inv = 1.0f / float(max_x);
+    float max_y_inv = 1.0f / float(max_y);
+
+    #pragma omp parallel for num_threads(5) reduction(+:col_0) reduction(+:col_1) reduction(+:col_2)
     for(int s=0; s < ns; s++) {
-        float u = float(i + curand_uniform(&local_rand_state)) / float(max_x);
-        float v = float(j + curand_uniform(&local_rand_state)) / float(max_y);
+        float u = float(i + curand_uniform(&local_rand_state)) * max_x_inv;
+        float v = float(j + curand_uniform(&local_rand_state)) * max_y_inv;
         ray r = (*cam)->get_ray(u, v, &local_rand_state);
-        col += color(r, world, &local_rand_state);
+        // col += color(r, world, &local_rand_state);
+
+        vec3 render_color = color(r, world, &local_rand_state);
+        col_0 += render_color[0];
+        col_1 += render_color[1];
+        col_2 += render_color[2];
     }
     rand_state[pixel_index] = local_rand_state;
-    col /= float(ns);
+    /*col /= float(ns);
     col[0] = sqrt(col[0]);
     col[1] = sqrt(col[1]);
-    col[2] = sqrt(col[2]);
+    col[2] = sqrt(col[2]);*/
+
+    float ns_inv = 1.0f / float(ns);
+    col[0] = sqrt(col_0 * ns_inv);
+    col[1] = sqrt(col_1 * ns_inv);
+    col[2] = sqrt(col_2 * ns_inv);
+
     fb[pixel_index] = col;
 }
 
