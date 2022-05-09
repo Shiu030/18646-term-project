@@ -89,7 +89,7 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     if (threadIdx.z == 0) {
         vec3 col(0, 0, 0);
         for (int s = 0; s < ns; s++) {
-            col += buff[threadIdx.x * 80 + threadIdx.y * 10 + ns];
+            col += buff[threadIdx.x * 80 + threadIdx.y * 10 + s];
         }
         col /= float(ns);
         col[0] = sqrt(col[0]);
