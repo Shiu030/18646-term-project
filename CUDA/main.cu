@@ -202,7 +202,7 @@ int main() {
     dim3 Rthreads(tx,ty,ns);
     const unsigned int SharedDataSize =
         tx * ty * ns * sizeof(vec3);
-    render_init<<<blocks, Rthreads>>>(nx, ny, d_rand_state);
+    render_init<<<blocks, Rthreads>>>(nx, ny, ns, d_rand_state);
     checkCudaErrors(cudaGetLastError());
     checkCudaErrors(cudaDeviceSynchronize());
     render<<<blocks, Rthreads, SharedDataSize>>>(fb, nx, ny, ns, d_camera, d_world, d_rand_state);
