@@ -131,15 +131,17 @@ int main() {
               << image_width << ' ' << image_height << "\n255\n";
     gettimeofday(&start, NULL);
 
+    #pragma omp parallel for private(j, i, s, r, u, v, pixel_color)
     for (int j = image_height - 1; j >= 0; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        #pragma omp parallel for \
-                private(i, s, r, u, v, pixel_color)  \
 
+        // #pragma omp parallel for private(i, s, r, u, v, pixel_color)
         for (i = 0; i < image_width; ++i)
         {
             pixel_color = color(0, 0, 0);
+
+            // #pragma omp parallel for private(s, r, u, v)
             for (s = 0; s < samples_per_pixel; ++s)
             {
                 u = (i + random_double()) / (image_width - 1);
